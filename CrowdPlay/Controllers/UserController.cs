@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace CrowdPlay.Controllers
 {
@@ -13,12 +12,5 @@ namespace CrowdPlay.Controllers
 
             return View("Index");
         }
-    }
-
-    public class User
-    {
-        public string mood { get; set; }
-        public int room { get; set; }
-        public Guid id { get; set; }
     }
 }

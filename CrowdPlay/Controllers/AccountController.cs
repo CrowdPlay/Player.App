@@ -359,7 +359,7 @@ namespace CrowdPlay.Controllers
             {
                 return RedirectToAction("Index", "Manage");
             }
-
+            
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
@@ -375,17 +375,21 @@ namespace CrowdPlay.Controllers
                     result = await UserManager.AddLoginAsync(user.Id, info.Login);
                     if (result.Succeeded)
                     {
+                        var claimsIdentity = await AuthenticationManager.GetExternalIdentityAsync(DefaultAuthenticationTypes.ExternalCookie);
+                        var twitterHandle = claimsIdentity.Claims.Where(c => c.Type == ("urn:twitter:screen_name")).ToArray()[0];
+                        await UserManager.AddClaimAsync(user.Id, twitterHandle);
+
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
-                        var domainUser = new User()
+                        var requestUser = new RequestUser()
                         {
-                            id = new Guid(User.Identity.GetUserId()),
-                            mood = "Default",
-                            room = 1
+                            Mood = "Default",
+                            Room = 1,
+                            TwitterHandle = twitterHandle.Value
                         };
 
-                        var request = new RestRequest("/user", Method.POST) {RequestFormat = DataFormat.Json};
-                        request.AddBody(domainUser);
+                        var request = new RestRequest("/user", Method.PUT) {RequestFormat = DataFormat.Json};
+                        request.AddBody(requestUser);
 
                         new RestClient("http://191.238.115.5:8081").Execute(request);
                         return RedirectToLocal(returnUrl);

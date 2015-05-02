@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Configuration.Provider;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Facebook;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using CrowdPlay.Models;
@@ -30,11 +34,12 @@ namespace CrowdPlay
                 {
                     // Enables the application to validate the security stamp when the user logs in.
                     // This is a security feature which is used when you change a password or add an external login to your account.  
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
-                        validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                    OnValidateIdentity =
+                        SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
+                            validateInterval: TimeSpan.FromMinutes(30),
+                            regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
                 }
-            });            
+            });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 
             // Enables the application to temporarily store user information when they are verifying the second factor in the two-factor authentication process.
@@ -49,11 +54,22 @@ namespace CrowdPlay
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
             //    clientSecret: "");
-
-            app.UseTwitterAuthentication(
-                consumerKey: "6dhL9qsNEbKB2Kn1VP0dr8qUf",
-                consumerSecret: "YX4MCXcViJNErfr7hwW7AMrhYAjKNN2FOkt2b9f8ZjhEfD8dU0"
-              );
+            
+             var twitterOptions = new Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions
+                {
+                    ConsumerKey = "6dhL9qsNEbKB2Kn1VP0dr8qUf",
+                    ConsumerSecret = "YX4MCXcViJNErfr7hwW7AMrhYAjKNN2FOkt2b9f8ZjhEfD8dU0",
+                    Provider = new Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider
+                    {
+                        OnAuthenticated = (context) =>
+                        {
+                            context.Identity.AddClaim(new Claim("urn:twitter:screen_name", context.ScreenName, ClaimTypes.NameIdentifier));
+                            return Task.FromResult(0);
+                        }
+                    }
+                };
+ 
+            app.UseTwitterAuthentication(twitterOptions);
 
             //app.UseFacebookAuthentication(
             //   appId: "",
