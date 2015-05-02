@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CrowdPlay.Models;
+using RestSharp;
 
 namespace CrowdPlay.Controllers
 {
@@ -375,6 +376,18 @@ namespace CrowdPlay.Controllers
                     if (result.Succeeded)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                        var domainUser = new User()
+                        {
+                            id = new Guid(User.Identity.GetUserId()),
+                            mood = "Default",
+                            room = 1
+                        };
+
+                        var request = new RestRequest("/user", Method.POST) {RequestFormat = DataFormat.Json};
+                        request.AddBody(domainUser);
+
+                        new RestClient("http://191.238.115.5:8081").Execute(request);
                         return RedirectToLocal(returnUrl);
                     }
                 }
