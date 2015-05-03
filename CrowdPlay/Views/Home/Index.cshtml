@@ -17,7 +17,14 @@
     <div data-uk-button-radio style="margin-top:10px;">
         @foreach (var mood in ViewBag.Moods)
         {
-            <button onclick="reply_click(this.id) " id="mood-@mood" class="uk-button" style="margin-bottom:5px;">@mood</button>
+            if (ViewBag.Mood == mood)
+            {
+                <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button uk-active" style="margin-bottom:5px;">@mood</button>
+            }
+            else
+            {
+                <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button" style="margin-bottom:5px;">@mood</button>
+            }
         }
     </div>
 }

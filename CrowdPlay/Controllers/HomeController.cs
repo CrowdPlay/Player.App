@@ -26,8 +26,10 @@ namespace CrowdPlay.Controllers
                 var twitterHandle = GetTwitterHandle();
 
                 ViewBag.TwitterHandle = twitterHandle;
-                ViewBag.Room = GetUser(twitterHandle).Room;
-                ViewBag.Mood = "kjasnd";
+                var user = GetUser(twitterHandle);
+
+                ViewBag.Room = user.Room;
+                ViewBag.Mood = user.Mood;
             }
             
             return View();
