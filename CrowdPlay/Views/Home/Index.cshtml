@@ -42,14 +42,14 @@
 {
     <div class="background-white" style="display:inline-block;width:100%;margin-top:10px;padding:5px;">
         <p style="font-size: 20px;text-align: center;width:100%;">
-            Now Playing: <span style="color:#00cc66">Gnarles Barkely</span> - <span style="color:grey">The Odd Couple</span>
+            Now Playing: <span id="artist" style="color:#00cc66"></span> - <span id="track" style="color:grey"></span>
         </p>
         <div style="width:60%;margin-left:20%; display:inline-block;">
             <div style="width:60%; margin-left: 20%;">
                 <img  class="cover">
 
                 <audio id="player" controls autoplay preload="auto" style="width:100%;">
-                    <source src="http://crowdplay-streamer.azurewebsites.net/room/1/stream" type='audio/mpeg'>
+                    <source src="http://crowdplay-streamer.azurewebsites.net/room/@ViewBag.Room/stream" type='audio/mpeg'>
                     <p>Your user agent does not support the HTML5 Audio element.</p>
                 </audio>
             </div>
@@ -63,6 +63,7 @@
         </h1>
         <div data-uk-button-radio style="margin-top:10px;">
             @foreach (var mood in ViewBag.Moods)
+
             {
                 if (ViewBag.Mood == mood)
                 {
@@ -88,7 +89,30 @@ else
 }
 
 <script type="text/javascript">
-    $('body').css('background-image', 'url(http://www.wmeentertainment.com/gnarls_barkley/imgs/album-art.jpg)');
+    
+    function updateNowPlaying() {
+        $.getJSON("/Home/NowPlaying?roomId=@ViewBag.Room", function (data) {
+            var nowPlaying = $('#artist');
+            var track = $('#track');
+
+            nowPlaying.text(data.Artist.Name);
+            track.text(data.Track.Title);
+
+            $('body').css('background-image', 'url(' + data.Release.Image.replace("_50.jpg", "_350.jpg") + ')');
+
+        });
+    }
+
+    $(function () {
+        var audioElement = $('audio#player');
+        audioElement.on('ended', function () {
+            audioElement.load();
+            audioElement.play();
+        });
+        audioElement.on('play', function () {
+            updateNowPlaying();
+        });
+    });
 
     function reply_click(clicked_id) {
         var mood = clicked_id.split('-')[1];
