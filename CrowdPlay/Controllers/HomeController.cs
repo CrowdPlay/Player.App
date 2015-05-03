@@ -20,7 +20,7 @@ namespace CrowdPlay.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                ViewBag.Moods = moods;
+                ViewBag.Moods = moods.OrderBy(s => s).ToArray();
                 var twitterHandle = GetTwitterHandle();
 
                 ViewBag.TwitterHandle = twitterHandle;
