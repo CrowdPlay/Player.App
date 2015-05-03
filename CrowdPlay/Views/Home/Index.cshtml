@@ -12,8 +12,12 @@
 {
     <audio id="player" controls autoplay preload="auto">
         <source src="http://crowdplay-streamer.azurewebsites.net/room/1/stream" type='audio/mpeg'>
-        <p>Your user agent does not support the HTML5 Audio element.</p>
+        <p>Your user agent does not support the HTML5 Audio element SAD FACE.</p>
     </audio>
+    
+    <p>
+        Now playing: <span id="nowplaying">Loading...</span>
+    </p>
 
     <div data-uk-button-radio style="margin-top:10px;">
         @foreach (var mood in ViewBag.Moods)
@@ -35,6 +39,26 @@ else
 }
 
 <script type="text/javascript">
+    
+    function updateNowPlaying() {
+        $.getJSON("/Home/NowPlaying?roomId=1", function (data) {
+            var nowPlaying = $('#nowplaying');
+
+            nowPlaying.text(data.artist + ' - ' + data.title);
+        });
+    }
+
+    $(function () {
+        var audioElement = $('audio#player');
+        audioElement.on('ended', function () {
+            audioElement.load();
+            audioElement.play();
+        });
+        audioElement.on('play', function () {
+            updateNowPlaying();
+        });
+    });
+
     function reply_click(clicked_id) {
         var mood = clicked_id.split('-')[1];
         var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + mood + "\", \"Room\": \"" + @ViewBag.Room + "\" }";
