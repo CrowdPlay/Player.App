@@ -63,9 +63,8 @@
         </h1>
         <div data-uk-button-radio style="margin-top:10px;">
             @foreach (var mood in ViewBag.Moods)
-
             {
-                if (ViewBag.Mood == mood)
+                if (string.Equals(ViewBag.Mood, mood, StringComparison.OrdinalIgnoreCase))
                 {
                     <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button uk-active" style="margin-bottom:5px;">@mood</button>
                 }
@@ -150,7 +149,7 @@ else
 
     function reply_click(clicked_id) {
         var mood = clicked_id.split('-')[1];
-        var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + mood + "\", \"Room\": \"" + 0 + "\" }";
+        var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + mood + "\", \"Room\": \"" + @ViewBag.Room + "\" }";
 
 
         $.ajax({

@@ -16,13 +16,13 @@ namespace CrowdPlay.Controllers
     {
         public ActionResult Index()
         {
-            var moods = GetAllMoods();
-            var rooms = GetAllRooms();
-
-            ViewBag.MoodRooms = rooms.Select(room => GetRoomInfo(room).Mood).ToList();
-
-            if (User.Identity.IsAuthenticated)
+           if (User.Identity.IsAuthenticated)
             {
+                var moods = GetAllMoods();
+                var rooms = GetAllRooms();
+
+                ViewBag.MoodRooms = rooms.Select(room => GetRoomInfo(room).Mood).ToList();
+
                 ViewBag.Moods = moods.OrderBy(s => s).ToArray();
                 var twitterHandle = GetTwitterHandle();
 
