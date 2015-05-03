@@ -28,6 +28,7 @@ namespace CrowdPlay.Controllers
 
                 ViewBag.Room = user.Room;
                 ViewBag.Mood = user.Mood;
+                ViewBag.OtherUsers = GetRoomInfo(user.Room).Usernames;
             }
             
             return View();
@@ -69,6 +70,15 @@ namespace CrowdPlay.Controllers
             var response = new RestClient("http://191.238.115.5:8081").Execute(request).Content;
 
             return new JavaScriptSerializer().Deserialize<IEnumerable<string>>(response);
+        }
+
+        private RoomUserModel GetRoomInfo(int roomId)
+        {
+            var request = new RestRequest("/roomInfo/" + roomId, Method.GET) { RequestFormat = DataFormat.Json };
+
+            var response = new RestClient("http://191.238.115.5:8081").Execute(request).Content;
+
+            return new JavaScriptSerializer().Deserialize<RoomUserModel>(response);
         }
 
         [HttpGet]
@@ -141,6 +151,11 @@ namespace CrowdPlay.Controllers
 
             return View();
         }
+    }
+
+    public class RoomUserModel
+    {
+        public IEnumerable<string> Usernames { get; set; }
     }
 
     public class RoomInfoModel
