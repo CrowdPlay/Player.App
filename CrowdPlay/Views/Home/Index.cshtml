@@ -9,33 +9,78 @@
             background-color: #00CC66;
             color: white;
         }
+
+        .background-grey {
+            -webkit-border-radius: 25px;
+            -moz-border-radius: 25px;
+            border-radius: 25px;
+            
+            background-color:grey;
+            padding:10px;
+            margin: 20px;
+            opacity: 0.9;
+        }
+
+        .background-white {
+            -webkit-border-radius: 25px;
+            -moz-border-radius: 25px;
+            border-radius: 25px;
+            
+            background-color:white;
+            min-height: 70px;
+            opacity: 0.9;
+        }
+
+         .background-grey h1 {
+             color: #FFFFFF;
+         }
+
     </style>
 }
 
-<div class="jumbotron">
-    <h1>CrowdPlay</h1>
-</div>
-    
 @if (Request.IsAuthenticated)
 {
-    <audio id="player" controls autoplay preload="auto">
-        <source src="http://crowdplay-streamer.azurewebsites.net/room/1/stream" type='audio/mpeg'>
-        <p>Your user agent does not support the HTML5 Audio element.</p>
-    </audio>
+    <div class="background-white" style="display:inline-block;width:100%;margin-top:10px;padding:5px;">
+        <p style="font-size: 20px;text-align: center;width:100%;">
+            Now Playing: <span style="color:#00cc66">Gnarles Barkely</span> - <span style="color:grey">The Odd Couple</span>
+        </p>
+        <div style="width:60%;margin-left:20%; display:inline-block;">
+            <div style="width:60%; margin-left: 20%;">
+                <img  class="cover">
 
-    <div data-uk-button-radio style="margin-top:10px;">
-        @foreach (var mood in ViewBag.Moods)
-        {
-            if (ViewBag.Mood == mood)
-            {
-                <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button uk-active" style="margin-bottom:5px;">@mood</button>
-            }
-            else
-            {
-                <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button" style="margin-bottom:5px;">@mood</button>
-            }
-        }
+                <audio id="player" controls autoplay preload="auto" style="width:100%;">
+                    <source src="http://crowdplay-streamer.azurewebsites.net/room/1/stream" type='audio/mpeg'>
+                    <p>Your user agent does not support the HTML5 Audio element.</p>
+                </audio>
+            </div>
+        </div>
+
     </div>
+    
+    <div class="background-grey" style="width:70%;float:left;">
+        <h1>
+            How are you feeling?
+        </h1>
+        <div data-uk-button-radio style="margin-top:10px;">
+            @foreach (var mood in ViewBag.Moods)
+            {
+                if (ViewBag.Mood == mood)
+                {
+                    <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button uk-active" style="margin-bottom:5px;">@mood</button>
+                }
+                else
+                {
+                    <button onclick="reply_click(this.id)" id="mood-@mood" class="uk-button" style="margin-bottom:5px;">@mood</button>
+                }
+            }
+        </div>
+    </div>
+    
+    <div style="float:right;display:inline-block; margin-top:20px;width:25%;height:300px;">
+        <a class="twitter-timeline" href="https://twitter.com/CrowdPlayBot" data-widget-id="594782253659598848">Tweets by @Html.Raw("@CrowdPlayBot")</a>
+        <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
+    </div>
+    
 }
 else
 {
@@ -43,6 +88,8 @@ else
 }
 
 <script type="text/javascript">
+    $('body').css('background-image', 'url(http://www.wmeentertainment.com/gnarls_barkley/imgs/album-art.jpg)');
+
     function reply_click(clicked_id) {
         var mood = clicked_id.split('-')[1];
         var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + mood + "\", \"Room\": \"" + @ViewBag.Room + "\" }";

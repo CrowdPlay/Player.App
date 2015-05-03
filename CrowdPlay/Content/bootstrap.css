@@ -4171,7 +4171,7 @@ textarea.input-group-sm > .input-group-btn > .btn {
   position: fixed;
   right: 0;
   left: 0;
-  border-width: 0 0 1px;
+  border-width: 0 0 0px;
 }
 
 @media (min-width: 768px) {
