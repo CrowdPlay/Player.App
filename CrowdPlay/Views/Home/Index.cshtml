@@ -82,7 +82,7 @@
             <a class="twitter-timeline" href="https://twitter.com/CrowdPlayBot" data-widget-id="594782253659598848">Tweets by @Html.Raw("@CrowdPlayBot")</a>
             <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
         </div>
-        <div class="background-white" style="margin-top:10px; padding:10px;">
+        <div class="background-white" style="margin-top:10px; padding:10px;min-height:148px;">
             <h3>Users in this room:</h3>
             <ul class="media-list">
                 @foreach (var user in ViewBag.OtherUsers)
@@ -93,6 +93,19 @@
                         </div>
                     </li>
                 }
+            </ul>
+        </div>
+        <div class="background-white" style="margin-top:10px; padding:10px;">
+            <h3>Join room</h3>
+            <ul class="media-list">
+                <li class="media">
+                    <select id="roomss" onchange="roomChange()">
+                        @foreach (var room in ViewBag.MoodRooms)
+                        {
+                            <option value="@room">@room</option>
+                            }
+                        </select>
+                </li>
             </ul>
         </div>
     </div>
@@ -139,6 +152,7 @@ else
         var mood = clicked_id.split('-')[1];
         var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + mood + "\", \"Room\": \"" + 0 + "\" }";
 
+
         $.ajax({
             type: "POST",
             url: "/Home/UpdateMood",
@@ -150,5 +164,27 @@ else
                 console.log(errMsg);
             }
         });
+    }
+
+    function roomChange() {
+        var roomId = $('#roomss').val();
+
+        $.getJSON("/Home/RoomInfo?roomId=@ViewBag.Room", function (data) {
+            var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + data.Mood + "\", \"Room\": \"" + roomId + "\" }";
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/UpdateMood",
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (succdata) { console.log(succdata); },
+                failure: function (errMsg) {
+                    console.log(errMsg);
+                }
+            });
+        });
+
+        
     }
 </script>

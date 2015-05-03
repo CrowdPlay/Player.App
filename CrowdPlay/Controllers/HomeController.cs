@@ -17,6 +17,9 @@ namespace CrowdPlay.Controllers
         public ActionResult Index()
         {
             var moods = GetAllMoods();
+            var rooms = GetAllRooms();
+
+            ViewBag.MoodRooms = rooms.Select(room => GetRoomInfo(room).Mood).ToList();
 
             if (User.Identity.IsAuthenticated)
             {
@@ -32,6 +35,15 @@ namespace CrowdPlay.Controllers
             }
             
             return View();
+        }
+
+        private IEnumerable<int> GetAllRooms()
+        {
+            var request = new RestRequest("/getallroom", Method.GET) { RequestFormat = DataFormat.Json };
+
+            var response = new RestClient("http://191.238.115.5:8081").Execute(request).Content;
+
+            return new JavaScriptSerializer().Deserialize<IEnumerable<int>>(response);
         }
 
         public ActionResult UpdateMood()
@@ -72,7 +84,7 @@ namespace CrowdPlay.Controllers
             return new JavaScriptSerializer().Deserialize<IEnumerable<string>>(response);
         }
 
-        private RoomUserModel GetRoomInfo(int roomId)
+        public RoomUserModel GetRoomInfo(int roomId)
         {
             var request = new RestRequest("/roomInfo/" + roomId, Method.GET) { RequestFormat = DataFormat.Json };
 
@@ -156,6 +168,7 @@ namespace CrowdPlay.Controllers
     public class RoomUserModel
     {
         public IEnumerable<string> Usernames { get; set; }
+        public string Mood { get; set; }
     }
 
     public class RoomInfoModel
