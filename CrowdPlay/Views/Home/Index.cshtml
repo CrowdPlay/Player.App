@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Home Page";
 }
 @using Microsoft.AspNet.Identity
@@ -10,7 +11,7 @@
 @if (Request.IsAuthenticated)
 {
     <audio id="player" controls autoplay preload="auto">
-        <source src="http://localhost:8080/room/1/stream" type='audio/mpeg'>
+        <source src="http://crowdplay-streamer.azurewebsites.net/room/1/stream" type='audio/mpeg'>
         <p>Your user agent does not support the HTML5 Audio element.</p>
     </audio>
 
