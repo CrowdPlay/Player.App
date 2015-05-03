@@ -5,32 +5,42 @@
 
 <div class="jumbotron">
     <h1>CrowdPlay</h1>
+</div>
     
 @if (Request.IsAuthenticated)
 {
-    <div class="col-md-4">
-        <audio id="player" controls autoplay preload="auto">
-            <source src="http://localhost:8080/room/1/stream" type='audio/mpeg'>
-            <p>Your user agent does not support the HTML5 Audio element.</p>
-        </audio>
-    </div>
-    <div class="col-md-4">
-        <ul>
-    @foreach (var mood in ViewBag.Moods)
-    {
-            <li id="mood-@mood">@mood</li>
-    }
-        </ul>
+    <audio id="player" controls autoplay preload="auto">
+        <source src="http://localhost:8080/room/1/stream" type='audio/mpeg'>
+        <p>Your user agent does not support the HTML5 Audio element.</p>
+    </audio>
+
+    <div data-uk-button-radio style="margin-top:10px;">
+        @foreach (var mood in ViewBag.Moods)
+        {
+            <button onclick="reply_click(this.id) " id="mood-@mood" class="uk-button" style="margin-bottom:5px;">@mood</button>
+        }
     </div>
 }
 else
 {
     <p>Login to listen to the radio!</p>
 }
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-
-    </div>
-</div>
+<script type="text/javascript">
+    function reply_click(clicked_id) {
+        var mood = clicked_id.split('-')[1];
+        var data = "{ \"TwitterHandle\": \"@ViewBag.TwitterHandle\", \"Mood\": \"" + mood + "\", \"Room\": \"" + @ViewBag.Room + "\" }";
+        
+        $.ajax({
+            type: "POST",
+            url: "/Home/UpdateMood",
+            data: data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (succdata) { console.log(succdata); },
+            failure: function(errMsg) {
+                console.log(errMsg);
+            }
+        });
+    }
+</script>

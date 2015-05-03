@@ -383,8 +383,8 @@ namespace CrowdPlay.Controllers
 
                         var requestUser = new RequestUser()
                         {
-                            Mood = "Default",
-                            Room = 1,
+                            Mood = "HAPPY",
+                            Room = 0,
                             TwitterHandle = twitterHandle.Value
                         };
 

@@ -29,6 +29,14 @@ namespace CrowdPlay
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+            
+            bundles.Add(new ScriptBundle("~/bundles/uikit/js").Include(
+                      
+                      "~/Content/js/uikit.min.js"));
+
+            bundles.Add(new StyleBundle("~/bundles/uikit/css").Include(
+                      
+                      "~/Content/css/uikit.css"));
         }
     }
 }
