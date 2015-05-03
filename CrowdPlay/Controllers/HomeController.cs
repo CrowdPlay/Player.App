@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 
@@ -9,6 +10,10 @@ namespace CrowdPlay.Controllers
         public ActionResult Index()
         {
             ((ClaimsIdentity) User.Identity).FindFirst("FullName");
+
+            var moods = new List<string> { "HAPPY", "SLEEPY" };
+
+            ViewBag.Moods = moods;
 
             return View();
         }

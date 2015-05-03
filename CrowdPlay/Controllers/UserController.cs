@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 
 namespace CrowdPlay.Controllers
 {
@@ -9,7 +10,6 @@ namespace CrowdPlay.Controllers
         public ActionResult Index()
         {
             
-
             return View("Index");
         }
     }
