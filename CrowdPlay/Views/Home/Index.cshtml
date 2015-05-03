@@ -2,7 +2,15 @@
 @{
     ViewBag.Title = "Home Page";
 }
-@using Microsoft.AspNet.Identity
+
+@section CustomStyle {
+    <style>
+        .uk-button:active, .uk-button.uk-active {
+            background-color: #00CC66;
+            color: white;
+        }
+    </style>
+}
 
 <div class="jumbotron">
     <h1>CrowdPlay</h1>
