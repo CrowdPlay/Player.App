@@ -4,12 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - CrowdPlay</title>
-    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/cssbundle")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/crowdplay")
-    @Styles.Render("~/bundles/uikit/css")
-    @Scripts.Render("~/bundles/uikit/js")
+    @Styles.Render("~/bundles/uikit/cssbundle")
+    @Scripts.Render("~/bundles/uikit/jsbundle")
+    
+    @RenderSection("CustomStyle", false)
 
 </head>
 <body>

@@ -26,15 +26,15 @@ namespace CrowdPlay
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            bundles.Add(new StyleBundle("~/Content/cssbundle").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
             
-            bundles.Add(new ScriptBundle("~/bundles/uikit/js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/uikit/jsbundle").Include(
                       
                       "~/Content/js/uikit.min.js"));
 
-            bundles.Add(new StyleBundle("~/bundles/uikit/css").Include(
+            bundles.Add(new StyleBundle("~/bundles/uikit/cssbundle").Include(
                       
                       "~/Content/css/uikit.css"));
         }
